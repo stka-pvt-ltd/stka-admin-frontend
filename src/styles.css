@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #F5F7F5;
+    --foreground: #29352F;
+    --card: #FFFFFF;
+    --card-foreground: #29352F;
+    --popover: #FFFFFF;
+    --popover-foreground: #29352F;
+    --primary: #29352F;
+    --primary-foreground: #F5F7F5;
+    --secondary: #E8ECE9;
+    --secondary-foreground: #29352F;
+    --muted: #E8ECE9;
+    --muted-foreground: #5A6B62;
+    --accent: #5F9472;
+    --accent-foreground: #FFFFFF;
+    --destructive: oklch(0.58 0.2 27);
+    --destructive-foreground: #FFFFFF;
+    --border: #DDE5DF;
+    --input: #DDE5DF;
+    --ring: #5F9472;
+    --radius: 0.5rem;
+
+    --navy: #29352F;
+    --navy-soft: #3d4e46;
+    --pharma: #5F9472;
+    --pharma-soft: #C8DACD;
+    --steel: #8FB59D;
+  }
+
+  .dark {
+    --background: #19221D;
+    --foreground: #F5F7F5;
+    --card: #212C26;
+    --card-foreground: #F5F7F5;
+    --popover: #212C26;
+    --popover-foreground: #F5F7F5;
+    --primary: #5F9472;
+    --primary-foreground: #FFFFFF;
+    --secondary: #2C3932;
+    --secondary-foreground: #F5F7F5;
+    --muted: #2C3932;
+    --muted-foreground: #9BB0A3;
+    --accent: #5F9472;
+    --accent-foreground: #FFFFFF;
+    --destructive: oklch(0.58 0.2 27);
+    --destructive-foreground: #FFFFFF;
+    --border: #33433A;
+    --input: #33433A;
+    --ring: #5F9472;
+  }
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
