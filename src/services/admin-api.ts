@@ -87,11 +87,39 @@ export const adminCategoriesApi = {
 };
 
 export const adminCompanyInfoApi = {
-  async get(): Promise<CompanyInformationResponse> {
-    return apiClient.get<CompanyInformationResponse>("/api/v1/public/company");
+  async get(): Promise<CompanyInformationResponse | null> {
+    try {
+      return await apiClient.get<CompanyInformationResponse>("/api/v1/public/company");
+    } catch (err: any) {
+      if (
+        err.status === 404 ||
+        err.status === 400 ||
+        (err.message && err.message.toLowerCase().includes("not found"))
+      ) {
+        return null;
+      }
+      throw err;
+    }
+  },
+  async create(data: CompanyInformationRequest): Promise<CompanyInformationResponse> {
+    return apiClient.post<CompanyInformationResponse>("/api/v1/admin/company", data);
   },
   async update(data: CompanyInformationRequest): Promise<CompanyInformationResponse> {
     return apiClient.put<CompanyInformationResponse>("/api/v1/admin/company", data);
+  },
+  async save(data: CompanyInformationRequest): Promise<CompanyInformationResponse> {
+    try {
+      return await apiClient.put<CompanyInformationResponse>("/api/v1/admin/company", data);
+    } catch (err: any) {
+      if (
+        err.status === 404 ||
+        err.status === 400 ||
+        (err.message && err.message.toLowerCase().includes("not found"))
+      ) {
+        return await apiClient.post<CompanyInformationResponse>("/api/v1/admin/company", data);
+      }
+      throw err;
+    }
   },
   async uploadLogo(file: File): Promise<CompanyInformationResponse> {
     const formData = new FormData();

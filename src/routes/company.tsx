@@ -12,6 +12,7 @@ import {
   Image as ImageIcon,
   MapPin,
   Upload,
+  Info,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,24 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FormSection, FormGrid, FormField } from "@/components/ui/admin-form";
 import { Skeleton } from "@/components/ui/skeleton";
 
+const DEFAULT_COMPANY_FORM: CompanyInformationRequest = {
+  companyName: "STKA Pharmaceutical",
+  legalName: "STKA PVT LTD.",
+  description: "STKA Pvt Ltd is a pharmaceutical company focused on the development, manufacturing, and supply of quality pharmaceutical products.",
+  vision: "To become a trusted pharmaceutical company delivering quality, reliable, and accessible healthcare solutions.",
+  mission: "To provide high-quality pharmaceutical products while maintaining strong standards of quality, integrity, and customer satisfaction.",
+  email: "info@stkapvt.com",
+  phone: "9625979342",
+  address: "Shop No. 1 Hussain House, Tektar",
+  city: "Darbhanga",
+  state: "Bihar",
+  country: "India",
+  pinCode: "847306",
+  location: "Sh75, Tektar, Bihar 847306, India",
+  latitude: 26.278879,
+  longitude: 85.850139,
+};
+
 export const Route = createFileRoute("/company")({
   head: () => ({
     meta: [{ title: "Company Profile Management | STKA Admin" }],
@@ -30,25 +49,11 @@ export const Route = createFileRoute("/company")({
 });
 
 function AdminCompanyPage() {
-  const { data: companyData, isLoading, error } = useAdminCompanyInfo();
+  const { data: companyData, isLoading, error, refetch } = useAdminCompanyInfo();
   const updateCompanyMutation = useUpdateCompanyInfo();
   const uploadLogoMutation = useUploadCompanyLogo();
 
-  const [formData, setFormData] = useState<CompanyInformationRequest>({
-    companyName: "",
-    legalName: "",
-    description: "",
-    vision: "",
-    mission: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    country: "",
-    pinCode: "",
-    location: "",
-  });
+  const [formData, setFormData] = useState<CompanyInformationRequest>(DEFAULT_COMPANY_FORM);
 
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
@@ -77,6 +82,8 @@ function AdminCompanyPage() {
       if (companyData.companyLogo?.imageUrl) {
         setLogoPreview(companyData.companyLogo.imageUrl);
       }
+    } else {
+      setFormData(DEFAULT_COMPANY_FORM);
     }
   }, [companyData]);
 
@@ -156,10 +163,25 @@ function AdminCompanyPage() {
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error Loading Company Profile</AlertTitle>
-          <AlertDescription>Failed to fetch company details from server.</AlertDescription>
+          <AlertDescription className="flex items-center justify-between gap-4">
+            <span>{error instanceof Error ? error.message : "Failed to fetch company details from server."}</span>
+            <Button type="button" variant="outline" size="sm" onClick={() => refetch()} className="gap-2 text-xs border-destructive/30 hover:bg-destructive/10">
+              Try Again
+            </Button>
+          </AlertDescription>
         </Alert>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
+          {!companyData && (
+            <Alert className="bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-950/40 dark:border-blue-800 dark:text-blue-300">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertTitle className="text-xs font-bold">Uninitialized Profile</AlertTitle>
+              <AlertDescription className="text-xs">
+                Company profile has not been created yet on the server. Please review the details below and click Save Company Profile to initialize the profile.
+              </AlertDescription>
+            </Alert>
+          )}
+
           {successMsg && (
             <Alert className="bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300">
               <CheckCircle2 className="h-4 w-4 text-emerald-600" />

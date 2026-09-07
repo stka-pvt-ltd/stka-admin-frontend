@@ -146,7 +146,7 @@ export function useAdminCompanyInfo() {
 export function useUpdateCompanyInfo() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: CompanyInformationRequest) => adminCompanyInfoApi.update(data),
+    mutationFn: (data: CompanyInformationRequest) => adminCompanyInfoApi.save(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ADMIN_QUERY_KEYS.companyInfo });
     },
